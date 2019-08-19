@@ -3,9 +3,16 @@ import { closeWindow } from './window-helpers'
 
 import { BrowserWindow } from 'electron'
 
+const features = process.electronBinding('features')
+
 describe('remote module', () => {
   let w = null as unknown as BrowserWindow
-  before(async () => {
+  before(async function () {
+    if (!features.isRemoteModuleEnabled()) {
+      this.skip()
+      return
+    }
+
     w = new BrowserWindow({show: false, webPreferences: {nodeIntegration: true}})
     await w.loadURL('about:blank')
   })

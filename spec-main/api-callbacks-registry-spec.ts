@@ -1,8 +1,16 @@
 import { expect } from 'chai'
-import { CallbacksRegistry } from '../lib/renderer/callbacks-registry'
+import { CallbacksRegistry } from '../lib/renderer/remote/callbacks-registry'
+const features = process.electronBinding('features')
 
 describe('CallbacksRegistry module', () => {
   let registry: CallbacksRegistry
+
+  before(function () {
+    if (!features.isRemoteModuleEnabled()) {
+      this.skip()
+      return
+    }
+  })
 
   beforeEach(() => {
     registry = new CallbacksRegistry()

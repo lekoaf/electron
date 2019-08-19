@@ -10,6 +10,8 @@ const { remote, ipcRenderer } = require('electron')
 const { ipcMain, BrowserWindow } = remote
 const { expect } = chai
 
+const features = process.electronBinding('features')
+
 chai.use(dirtyChai)
 
 const comparePaths = (path1, path2) => {
@@ -22,6 +24,12 @@ const comparePaths = (path1, path2) => {
 
 describe('remote module', () => {
   const fixtures = path.join(__dirname, 'fixtures')
+
+  before(function () {
+    if (!features.isRemoteModuleEnabled()) {
+      this.skip()
+    }
+  })
 
   describe('remote.require', () => {
     it('should returns same object for the same module', () => {
